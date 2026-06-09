@@ -1,9 +1,9 @@
 # chipguy_ESP32-32E_4inch_display
 
-A self-contained **display + touch** driver for the generic **ESP32-32E 3.5" and 4.0"
-touch LCDs** — two common ESP32 boards with a **320×480 ST7796** SPI panel and
+A self-contained **display + touch** driver for the generic **ESP32-32E LCDs** in 
+**3.5"** and **4.0"** sizes — two common ESP32 boards with a **320×480 ST7796** SPI panel and
 an **XPT2046** resistive touch panel. (These are sold by several vendors; the PCB
-silkscreen reads *4.0" (or 3.5") LCD Display, ESP32-32E 320x480, Resistance Touch.*) It
+silkscreen reads *4.0"* or *3.5" LCD Display, ESP32-32E 320x480, Resistance Touch.*) It
 drives the display and the touch controller so you don't have to think about
 either: the hardware is fixed and fully handled, leaving you to write an
 **LVGL 9** app and nothing else.
@@ -14,11 +14,10 @@ and running before your code gets control. You pick the one that matches how you
 want to build your UI, copy it, and start replacing its placeholder UI with your
 own.
 
-> This is for the **ST7796 LCD with XPT2046 touch** version of this board, where
-> the display and touch **share one SPI bus** — this library handles that for
-> you. Boards with different controllers need a different library.  The
-> 2.8" and 3.2" versions of the "ESP32-32E" are different and this library
-> is not correct for them.
+> This is for the **ST7796 320x480 LCD** version of this board with **XPT2046 touch**.
+> Boards with different controllers or screen resolutions need a different library.
+> The 2.8" and 3.2" versions of the "ESP32-32E Resistance Touch" board are different and
+> this library is not correct for them.
 
 ---
 
@@ -45,13 +44,13 @@ The examples need **LVGL 9**. Install it via the Arduino
 `.ino`.
 
 This library was developed against LVGL 9.3 (the current version of LVGL that
-is compatible with Squareline) but is very likely compatible with later versions.
+is compatible with Squareline) and LVGL 9.5 (current as of publication) 
+but is very likely compatible with later versions.
 
 ### Arduino IDE board settings
 
-This is a classic **ESP32-WROOM-32** board. In **Tools ▸ Board ▸ esp32**, select
-**"ESP32 Dev Module"**. The defaults work and the examples fit comfortably in the
-default partition.
+This is a classic **ESP32** board. In **Tools ▸ Board ▸ esp32**, select
+**"ESP32 Dev Module"**.
 
 ---
 
@@ -164,20 +163,6 @@ What the header provides:
 You don't render or flush anything yourself — LVGL does, through the callbacks
 `lv_setup` installed. Your job is to create LVGL widgets and call
 `lv_timer_handler()` in `loop()`.
-
-### How the display and touch share one SPI bus
-
-On this board the ST7796 display and the XPT2046 touch controller sit on the
-**same** SPI bus (SCLK 14 / MOSI 13 / MISO 12), each with its own chip-select
-(display CS 15, touch CS 33). The display driver owns the ESP-IDF SPI bus and
-adds the touch controller as a second device on it; the SPI master driver
-arbitrates between them and re-clocks the bus (40 MHz for the display, ~2 MHz
-for touch) per transaction.
-
-The display flush is **double-buffered and DMA-driven**: one rendered region
-transmits over DMA while LVGL draws the next region into the other buffer. Before
-each touch read, the glue drains any in-flight display DMA so the shared bus is
-free. All of this is handled for you — your code only ever talks to LVGL.
 
 ### Portable across chipguy board libraries
 
