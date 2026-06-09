@@ -1,9 +1,9 @@
 # chipguy_ESP32-32E_4inch_display
 
-A self-contained **display + touch** driver for the generic **ESP32-32E 4.0"
-touch LCD** — a common ESP32 board with a 4.0" **320×480 ST7796** SPI panel and
-an **XPT2046** resistive touch panel. (It's sold by several vendors; the PCB
-silkscreen reads *"4.0" LCD Display, ESP32-32E 320x480, Resistance Touch."*) It
+A self-contained **display + touch** driver for the generic **ESP32-32E 3.5" and 4.0"
+touch LCDs** — two common ESP32 boards with a **320×480 ST7796** SPI panel and
+an **XPT2046** resistive touch panel. (These are sold by several vendors; the PCB
+silkscreen reads *4.0" (or 3.5") LCD Display, ESP32-32E 320x480, Resistance Touch.*) It
 drives the display and the touch controller so you don't have to think about
 either: the hardware is fixed and fully handled, leaving you to write an
 **LVGL 9** app and nothing else.
@@ -16,7 +16,9 @@ own.
 
 > This is for the **ST7796 LCD with XPT2046 touch** version of this board, where
 > the display and touch **share one SPI bus** — this library handles that for
-> you. Boards with different controllers need a different library.
+> you. Boards with different controllers need a different library.  The
+> 2.8" and 3.2" versions of the "ESP32-32E" are different and this library
+> is not correct for them.
 
 ---
 
